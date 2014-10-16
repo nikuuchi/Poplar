@@ -7,6 +7,6 @@ Poplar.jar
 *.swp
 
 .settings/
-
+.project
 build/
 bin/
