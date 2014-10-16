@@ -1,0 +1,12 @@
+.DS_Store
+
+*.class
+
+Poplar.jar
+
+*.swp
+
+.settings/
+
+build/
+bin/

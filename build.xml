@@ -1,0 +1,45 @@
+<project name="Poplar" default="jar">
+	<property name="Poplar_src_dir" value="src" />
+	<property name="build_dir"        value="build" />
+	<property name="Poplar_jar"     value="Poplar.jar" />
+	<property name="peg4d_jar"        value="ext/peg4d.jar" />
+	<property name="cli_jar"          value="ext/commons-cli-1.2.jar" />
+
+	<!-- ================================== -->
+	<!--                BUILD               -->
+	<!-- ================================== -->
+	<target name="build" >
+		<mkdir dir="${build_dir}" />
+		<javac srcdir="${Poplar_src_dir}" destdir="${build_dir}" debug="on" target="1.8" source="1.8" includeantruntime="false" >
+			<classpath path="${peg4d_jar}" />
+			<classpath path="${cli_jar}" />
+			<include name="**/*.java" />
+			<compilerarg value="-Xlint:deprecation" />
+			<compilerarg value="-Xlint:unchecked" />
+		</javac>
+	</target>
+
+	<!-- ================================== -->
+	<!--            GENERATE JAR            -->
+	<!-- ================================== -->
+	<target name="jar" depends="build">
+		<jar jarfile="${Poplar_jar}">
+			<fileset dir="${build_dir}" includes="**/*.class" />
+			<fileset dir="${Poplar_src_dir}/resource" includes="**" />
+			<exclude name="**/*Test.class" />
+			<manifest>
+				<attribute name="Main-Class" value="org.peg4d.poplar.PoplarMain" />
+			</manifest>
+			<zipfileset src="${peg4d_jar}"/>
+			<zipfileset src="${cli_jar}"/>
+		</jar>
+	</target>
+
+	<!-- ================================== -->
+	<!--               CLEAN                -->
+	<!-- ================================== -->
+	<target name="clean">
+		<delete dir="${build_dir}"/>
+		<delete file="${Poplar_jar}" />
+	</target>
+</project>
