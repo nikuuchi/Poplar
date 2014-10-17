@@ -23,7 +23,7 @@ export
 	/ CChar
 
 File
-	= _ { ( @TopLevel / _ )* #Source } EOT
+	= _ { ( @TopLevel / @{ '}' #Message } /_ )* #Source } EOT
 
 Chunk
 	= TopLevel
