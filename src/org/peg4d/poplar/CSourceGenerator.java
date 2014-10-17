@@ -86,6 +86,7 @@ public class CSourceGenerator extends Generator implements CTags {
 		this.write(" ");
 		this.dispatch(pego.get(2)); //Name
 
+		//FIXME For variable declaration?
 		if(isMessage(pego.get(3)) && isMessage(pego.get(5)) && pego.get(4).size() == 0) {
 			this.write(";\n");
 			return;
@@ -224,13 +225,22 @@ public class CSourceGenerator extends Generator implements CTags {
 
 	@Override
 	public void genBlock(ParsingObject pego) {
-		this.write("{\n");
+		this.write("{");
+		if(pego.size() > 0) {
+			if(!isMessage(pego.get(0))) {
+				this.write("\n");
+			}
+		}
 		indent.indent();
 		for(int i = 0; i < pego.size(); i++) {
-			this.write(indent.getIndentString());
 			ParsingObject p = pego.get(i);
+			if(!isEmpty(p)) {
+				this.write(indent.getIndentString());
+			}
 			this.dispatch(p);
-			this.write("\n");
+			if(!isEmpty(p)) {
+				this.write("\n");
+			}
 		}
 		indent.dedent();
 		this.write(indent.getIndentString());
@@ -350,7 +360,8 @@ public class CSourceGenerator extends Generator implements CTags {
 	}
 
 	private boolean isEmpty(ParsingObject pego) {
-		return pego.getTag().toString().equals("#empty");
+		String tag = pego.getTag().toString();
+		return tag.equals("Lbr") || tag.equals("Rbr");
 	}
 
 	@Override

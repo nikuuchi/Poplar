@@ -328,19 +328,19 @@ Enumerator
 //===================
 
 Br
-	= { "}" #Rbr / `}` #Message }
+	= { '}' #Rbr / `}` #Message } _
 
 Block
-	= { @{_ "{" #Lbr /  __ `{` #Message} (@Directive /  @Statement / @Declaration / _ )* @Br #Block }
+	= { (_ @{ '{' #Lbr } /  __ @{ `{` #Message} ) _ (@Directive /  @Statement / @Declaration / _ )* @Br #Block }
 
 Lbr
-	= { "(" #Lbr / (`(` #Message) }
+	= { '(' #Lbr / `(` #Message } _
 
 Rbr
 	= { ')' #Rbr / `)` #Message }
 
 Scln
-	= { ";" #Rbr / `;` #Message }
+	= { ';' #Rbr / `;` #Message } _
 
 Statement
 	= Block
