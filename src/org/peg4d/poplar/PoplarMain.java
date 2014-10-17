@@ -27,8 +27,8 @@ public class PoplarMain {
 		options.addOption("o", true, "output file");
 
 		CommandLineParser parser = new PosixParser();
-		CSourceGenerator generator = new CSourceGenerator("/dev/stdout");
 		String inputFileName = "";
+		String outputFileName = "/dev/stdout";
 		try {
 			CommandLine cmd = parser.parse(options, args);
 			if(cmd.hasOption("h")) {
@@ -38,11 +38,15 @@ public class PoplarMain {
 			if(cmd.hasOption("f")) {
 				inputFileName = cmd.getOptionValue("f");
 			}
+			if(cmd.hasOption("o")) {
+				outputFileName = cmd.getOptionValue("o");
+			}
 		} catch (ParseException e) {
 			PoplarMain.showHelp(options);
 			System.exit(0);
 		}
 
+		CSourceGenerator generator = new CSourceGenerator(outputFileName);
 		Grammar peg = new GrammarFactory().newGrammar("main", "c99.p4d");
 		ParsingSource ps = Main.loadSource(peg, inputFileName);
 		ParsingContext p = new ParsingContext(ps);
