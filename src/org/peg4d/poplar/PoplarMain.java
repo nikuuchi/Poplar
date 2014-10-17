@@ -25,10 +25,12 @@ public class PoplarMain {
 		options.addOption("h", false, "show this help");
 		options.addOption("f", true, "input file");
 		options.addOption("o", true, "output file");
+		options.addOption("d", false, "dump tree");
 
 		CommandLineParser parser = new PosixParser();
 		String inputFileName = "";
 		String outputFileName = "/dev/stdout";
+		boolean verbose = false;
 		try {
 			CommandLine cmd = parser.parse(options, args);
 			if(cmd.hasOption("h")) {
@@ -41,6 +43,9 @@ public class PoplarMain {
 			if(cmd.hasOption("o")) {
 				outputFileName = cmd.getOptionValue("o");
 			}
+			if(cmd.hasOption("d")) {
+				verbose = true;
+			}
 		} catch (ParseException e) {
 			PoplarMain.showHelp(options);
 			System.exit(0);
@@ -52,7 +57,7 @@ public class PoplarMain {
 		ParsingContext p = new ParsingContext(ps);
 		ParsingObject o = p.parse(peg, "File");
 		if(o != null) {
-			generator.writeC(o);
+			generator.writeC(o, verbose);
 		} else {
 			if(p.isFailure()) {
 				System.out.println(p.source.formatPositionLine("error", p.fpos, p.getErrorMessage()));

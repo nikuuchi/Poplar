@@ -15,8 +15,10 @@ public class CSourceGenerator extends Generator implements CTags {
 		indent = new IndentManager();
 	}
 
-	public void writeC(ParsingObject pego) {
-		//System.out.println(pego);
+	public void writeC(ParsingObject pego, boolean verbose) {
+		if(verbose) {
+			System.out.println(pego);
+		}
 		this.dispatch(pego);
 		this.close();
 	}
@@ -238,13 +240,17 @@ public class CSourceGenerator extends Generator implements CTags {
 				this.write(indent.getIndentString());
 			}
 			this.dispatch(p);
-			if(!isEmpty(p)) {
+			if(!(isEmpty(p) || isExpressionStatement(p))) {
 				this.write("\n");
 			}
 		}
 		indent.dedent();
 		this.write(indent.getIndentString());
 		this.write("}");
+	}
+
+	private boolean isExpressionStatement(ParsingObject p) {
+		return p.getTag().toString().equals("ExpressionStatement");
 	}
 
 	private boolean isMessage(ParsingObject pego) {
