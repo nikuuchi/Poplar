@@ -51,8 +51,14 @@ public class PoplarMain {
 		ParsingSource ps = Main.loadSource(peg, inputFileName);
 		ParsingContext p = new ParsingContext(ps);
 		ParsingObject o = p.parse(peg, "File");
-		if(generator != null) {
+		if(o != null) {
 			generator.writeC(o);
+		} else {
+			if(p.isFailure()) {
+				System.out.println(p.source.formatPositionLine("error", p.fpos, p.getErrorMessage()));
+				System.out.println(p.source.formatPositionLine("maximum matched", p.head_pos, ""));
+				return;
+			}
 		}
 	}
 

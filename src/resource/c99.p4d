@@ -30,9 +30,12 @@ Chunk
 	/ Statement
 	/ Expression
 	/ Type
+
 _
 	= (S / BLOCKCOMMENT / LINECOMMENT / ATTRIBUTE)*
 
+__
+	= (S / BLOCKCOMMENT / LINECOMMENT / ATTRIBUTE)+
 S
 	= [ \n\r\t\u000B\u000C]
 
@@ -195,7 +198,7 @@ Directive
 
 
 FunctionDeclaration
-	= { @AnnotationList @Type _ @Name _ @Lbr @FunctionParamList @Rbr (_ @Block /_ ";") #Function }
+	= { @AnnotationList @Type _ @Name _ @Lbr @FunctionParamList @Rbr ( @Block /_ ";") #Function }
 
 AnnotationList
 	= { (@Annotation)*  #List } _
@@ -324,14 +327,17 @@ Enumerator
 // Block, Statement
 //===================
 
+Br
+	= { "}" #Rbr / `}` #Message }
+
 Block
-	= { "{" (@Directive /  @Statement / @Declaration / _ )* "}" #Block }
+	= { @{_ "{" #Lbr /  __ `{` #Message} (@Directive /  @Statement / @Declaration / _ )* @Br #Block }
 
 Lbr
 	= { "(" #Lbr / (`(` #Message) }
 
 Rbr
-	= { ")" #Rbr / `)` #Message }
+	= { ')' #Rbr / `)` #Message }
 
 Scln
 	= { ";" #Rbr / `;` #Message }
