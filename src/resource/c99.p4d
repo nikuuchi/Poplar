@@ -440,7 +440,7 @@ PostfixExpression
 	{@ (addFunctionCall / addPointerField / addIndex / addField / addInc / addDec) }*
 
 addFunctionCall
-	= @{ "(" addArgumentExpressionList? ")" #List} #Apply
+	= @{ "(" addArgumentExpressionList? @RBR #List} #Apply
 
 addArgumentExpressionList
 	= (@AssignmentExpression ("," @AssignmentExpression)*)
