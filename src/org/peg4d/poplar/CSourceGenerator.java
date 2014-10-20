@@ -646,8 +646,10 @@ public class CSourceGenerator extends Generator implements CTags {
 				if(isMessage(pego.get(i))) {
 					this.dispatch(pego.get(i));
 				} else {
-					this.write(", ");
-					this.dispatch(pego.get(i));
+					if(!Is(pego.get(i), "Rbr")) {
+						this.write(", ");
+						this.dispatch(pego.get(i));
+					}
 				}
 			}
 			this.write(";");

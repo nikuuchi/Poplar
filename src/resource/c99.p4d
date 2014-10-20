@@ -198,7 +198,7 @@ Directive
 
 
 FunctionDeclaration
-	= { @AnnotationList @Type _ @Name _ @Lbr @FunctionParamList @Rbr (@Block / _ @Scln) #Function }
+	= { @AnnotationList @Type _ @Name _ @Lbr @FunctionParamList @Rbr (@Block / _ ";") #Function }
 
 AnnotationList
 	= { (@Annotation)*  #List } _
