@@ -23,7 +23,7 @@ export
 	/ CChar
 
 File
-	= _ { ( @TopLevel / @{ '}' #Message } /_ )* #Source } EOT
+	= _ { ( @TopLevel / @{ '}' `} が余分に付いています` #Message } /_ )* #Source } EOT
 
 Chunk
 	= TopLevel
@@ -328,19 +328,19 @@ Enumerator
 //===================
 
 Br
-	= { '}' #Rbr / `}` #Message } _
+	= { '}' #Rbr / `} が必要です` #Message } _
 
 Block
-	= { (_ @{ '{' #Lbr } /  __ @{ `{` #Message} ) _ (@Directive /  @Statement / @Declaration / _ )* @Br #Block }
+	= { (_ @{ '{' #Lbr } /  __ @{ `{ が必要です` #Message} ) _ (@Directive /  @Statement / @Declaration / _ )* @Br #Block }
 
 Lbr
-	= { '(' #Lbr / `(` #Message } _
+	= { '(' #Lbr / `( が必要です` #Message } _
 
 Rbr
-	= { ')' #Rbr / `)` #Message }
+	= { ')' #Rbr / `) が必要です` #Message }
 
 Scln
-	= { ';' #Rbr / `;` #Message } _
+	= { ';' #Rbr / `; が必要です` #Message } _
 
 Statement
 	= Block
