@@ -736,8 +736,10 @@ public class CSourceGenerator extends Generator implements CTags {
 	@Override
 	public void genParam(ParsingObject pego) {
 		this.dispatch(pego.get(0));
-		this.write(" ");
-		this.dispatch(pego.get(1));
+		if(pego.size() > 1) {
+			this.write(" ");
+			this.dispatch(pego.get(1));
+		}
 	}
 
 	@Override
