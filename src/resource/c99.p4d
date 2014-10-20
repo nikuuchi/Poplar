@@ -229,8 +229,8 @@ TypeDef
 	= { "typedef" _ @Type (_ @VarName _/_ @Name _)? (',' _ @VarName _/_ @Name _)* ";" #TypeDeclaration }
 
 VariableDeclaration
-	= { @AnnotationList @Type @InitDecl ("," @InitDecl)*  ATTRIBUTE? ";" #Declaration }
-	/ { @AnnotationList @Type ("=" @Initializer)? ("," @InitDecl)* ATTRIBUTE? ";" #Declaration }
+	= { @AnnotationList @Type @InitDecl ("," @InitDecl)*  ATTRIBUTE? @Scln #Declaration }
+	/ { @AnnotationList @Type ("=" @Initializer)? ("," @InitDecl)* ATTRIBUTE? @Scln #Declaration }
 
 InitDecl
 	= { @VarName ("=" @Initializer)? #VarDecl } _
