@@ -198,7 +198,7 @@ Directive
 
 
 FunctionDeclaration
-	= { @AnnotationList @Type _ @Name _ @Lbr @FunctionParamList @Rbr (_ ";" / @Block) #Function }
+	= { @AnnotationList @Type _ @Name _ @Lbr @FunctionParamList @Rbr (@Block / _ @Scln) #Function }
 
 AnnotationList
 	= { (@Annotation)*  #List } _
@@ -226,7 +226,7 @@ FunctionParam
 //==============
 
 TypeDef
-	= { "typedef" _ @Type (_ @VarName _/_ @Name _)? (',' _ @VarName _/_ @Name _)* ";" #TypeDeclaration }
+	= { "typedef" _ @Type (_ @VarName _/_ @Name _)? (',' _ @VarName _/_ @Name _)* @Scln #TypeDeclaration }
 
 VariableDeclaration
 	= { @AnnotationList @Type @InitDecl ("," @InitDecl)*  ATTRIBUTE? @Scln #Declaration }
