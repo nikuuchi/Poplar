@@ -311,17 +311,17 @@ public class CSourceGenerator extends Generator implements CTags {
 		return parsingObject.getTag().toString().equals(string);
 	}
 
+	//0: (, 1: cond, 2:), 3: {,  4: Block, 5: }
 	@Override
 	public void genWhile(ParsingObject pego) {
 		this.write("while(");
-		if(isMessage(pego.get(0))) {
-			this.dispatch(pego.get(0));
-			this.dispatch(pego.get(1));
-			this.createWhileBlock(pego, 2);
-		} else {
-			this.dispatch(pego.get(0));
-			this.createWhileBlock(pego, 1);
-		}
+		this.dispatchWithoutEmpty(pego.get(0)); //(
+		this.dispatchWithoutEmpty(pego.get(1)); //Cond
+		this.dispatchWithoutEmpty(pego.get(2)); //)
+		this.write(")");
+
+		this.dispatchWithoutEmpty(pego.get(3)); //Block
+
 	}
 
 	@Override
@@ -763,7 +763,13 @@ public class CSourceGenerator extends Generator implements CTags {
 	@Override
 	public void genInitializer(ParsingObject pego) {
 		this.write("{");
-		this.dispatch(pego.get(0));
+		if(pego.size() > 0) {
+			this.dispatch(pego.get(0));
+			for(int i = 1; i < pego.size(); i++) {
+				this.write(", ");
+				this.dispatch(pego.get(i));
+			}
+		}
 		this.write("}");
 	}
 
