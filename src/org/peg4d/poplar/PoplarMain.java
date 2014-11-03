@@ -53,7 +53,7 @@ public class PoplarMain {
 
 		CSourceGenerator generator = new CSourceGenerator(outputFileName);
 		Grammar peg = new GrammarFactory().newGrammar("main", "c99.p4d");
-		ParsingSource ps = Main.loadSource(peg, inputFileName);
+		ParsingSource ps = ParsingSource.loadSource(inputFileName);
 		ParsingContext p = new ParsingContext(ps);
 		ParsingObject o = p.parse(peg, "File");
 		if(o != null) {
