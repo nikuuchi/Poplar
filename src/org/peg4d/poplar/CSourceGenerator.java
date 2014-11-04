@@ -352,7 +352,9 @@ public class CSourceGenerator extends Generator implements CTags {
 		this.dispatchWithoutEmpty(pego.get(5));
 		this.write(")");
 		this.dispatchWithoutEmpty(pego.get(6));
-		this.dispatchWithoutEmpty(pego.get(7));
+		if(pego.size() > 7) {
+			this.dispatchWithoutEmpty(pego.get(7));
+		}
 	}
 
 	private boolean tagIs(ParsingObject pego, String tagName) {
