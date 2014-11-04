@@ -331,7 +331,7 @@ public class CSourceGenerator extends Generator implements CTags {
 		this.write("for(");
 		this.dispatchWithoutEmpty(pego.get(0)); // (
 		this.dispatchWithoutEmpty(pego.get(1)); // Cond1
-		if(!tagIs(pego.get(1), "Declaration")) {
+		if(!Is(pego.get(1), "Declaration")) {
 			this.write(";");
 		}
 		this.dispatchWithoutEmpty(pego.get(2));
@@ -344,10 +344,6 @@ public class CSourceGenerator extends Generator implements CTags {
 		if(pego.size() > 7) {
 			this.dispatchWithoutEmpty(pego.get(7));
 		}
-	}
-
-	private boolean tagIs(ParsingObject pego, String tagName) {
-		return pego.getTag().toString().equals(tagName);
 	}
 
 	private void dispatchWithoutEmpty(ParsingObject pego) {
