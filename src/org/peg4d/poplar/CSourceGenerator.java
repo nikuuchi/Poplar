@@ -257,17 +257,6 @@ public class CSourceGenerator extends Generator implements CTags {
 		return pego.getTag().toString().equals("Message");
 	}
 
-	private void createWhileBlock(ParsingObject pego, int i) {
-		if(isMessage(pego.get(i))) {
-			this.dispatch(pego.get(i));
-			this.write(")");
-			this.dispatch(pego.get(i+1));
-		} else {
-			this.write(")");
-			this.dispatch(pego.get(i));
-		}
-	}
-
 	@Override
 	public void genIf(ParsingObject pego) {
 		this.write("if(");
@@ -294,7 +283,7 @@ public class CSourceGenerator extends Generator implements CTags {
 			this.write(indent.getIndentString());
 		}
 
-		this.write("else");
+		this.write("else ");
 
 		if(!Is(pego.get(3), "Block")) {
 			this.write("\n");
