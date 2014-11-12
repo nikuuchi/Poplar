@@ -325,11 +325,7 @@ public class CSourceGenerator extends Generator implements CTags {
 		this.write("do");
 		this.dispatch(pego.get(0)); //Block
 		this.write("while(");
-		this.dispatchWithoutEmpty(pego.get(1)); // (
-		this.dispatch(pego.get(2)); //Cond
-		if(pego.size() > 3) {
-			this.dispatchWithoutEmpty(pego.get(3)); // )
-		}
+		this.dispatch(pego.get(1)); //Cond
 		this.write(");\n");
 	}
 

@@ -347,7 +347,7 @@ Statement
 	/ { "if" _     @Lbr @Expression @Rbr @Statement ("else" _ @Statement)? #If }
 	/ { "switch" _ @Lbr @Expression @Rbr @Statement #Switch }
 	/ { "while" _  @Lbr @Expression @Rbr @Statement #While }
-	/ { "do" _ @Statement "while" _ @Lbr @Expression @Rbr @Scln #DoWhile }
+	/ { "do" @Statement "while" _ @Lbr @Expression @Rbr @Scln #DoWhile }
 	/ { "for" _ @Lbr (@Expression)? @Scln (@Expression)? @Scln (@Expression)? @Rbr @Statement #For }
 	/ { "for" _ @Lbr @Declaration (@Expression)? @Scln (@Expression)? @Scln @Statement #For }
 	/ { "goto" _ @Name @Scln #Goto }

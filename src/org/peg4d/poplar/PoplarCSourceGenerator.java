@@ -56,4 +56,21 @@ public class PoplarCSourceGenerator extends CSourceGenerator {
 			this.write(";\n");
 		}
 	}
+
+	@Override
+	public void genDoWhile(ParsingObject pego) {
+		this.write("do");
+		this.dispatch(pego.get(0)); //Block
+		this.write("while(");
+		this.dispatchWithoutEmpty(pego.get(1)); // (
+		this.dispatch(pego.get(2)); //Cond
+		if(pego.size() > 3) {
+			this.dispatchWithoutEmpty(pego.get(3)); // )
+		}
+		this.write(");");
+		if(pego.size() == 5) {
+			this.dispatch(pego.get(4)); //;
+		}
+		this.write("\n");
+	}
 }

@@ -61,6 +61,11 @@ public class PoplarMain {
 			generator.writeC(o, verbose);
 		} else {
 			if(p.isFailure()) {
+				if(verbose) {
+					System.out.println(p.source.formatPositionLine("error", p.fpos, p.getErrorMessage()));
+					System.out.println(p.source.formatPositionLine("maximum matched", p.head_pos, ""));
+				}
+
 				Grammar fixer = new GrammarFactory().newGrammar("main", "c99_poplar.p4d");
 				ParsingSource inputs = ParsingSource.loadSource(inputFileName);
 				ParsingContext pc = new ParsingContext(inputs);

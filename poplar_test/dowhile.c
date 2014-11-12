@@ -1,9 +1,9 @@
 
 int main(int argc, char const* argv[])
 {
-	do {
+	do
 		int a = 1;
 		int b = 2;
-	} while(1);
+	} while(1)
 	return 0;
 }
