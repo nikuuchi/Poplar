@@ -117,8 +117,10 @@ public class CSourceGenerator extends Generator implements CTags {
 	public void genTypeDeclaration(ParsingObject pego) {
 		this.write("typedef ");
 		this.dispatch(pego.get(0));
-		this.write(" ");
-		this.dispatch(pego.get(1));
+		if(!Is(pego.get(0), "TFunc")) {
+			this.write(" ");
+			this.dispatch(pego.get(1));
+		}
 		this.write(";\n");
 	}
 
@@ -176,8 +178,13 @@ public class CSourceGenerator extends Generator implements CTags {
 
 	@Override
 	public void genTFunc(ParsingObject pego) {
-		System.err.println("TFunc");
-		this.write("/*function*/");
+		//System.err.println("TFunc");
+		//this.write("/*function*/");
+		this.dispatch(pego.get(0)); //return Type
+		this.write(" (* ");
+		this.dispatch(pego.get(1)); //Name
+		this.write(")");
+		this.createParameters(pego.get(2)); //Params
 	}
 
 	@Override
@@ -359,7 +366,7 @@ public class CSourceGenerator extends Generator implements CTags {
 
 	private boolean isEmpty(ParsingObject pego) {
 		String tag = pego.getTag().toString();
-		return tag.equals("Lbr") || tag.equals("Rbr");
+		return tag.equals("Lbr") || tag.equals("Rbr") || tag.equals("#equal");
 	}
 
 	@Override
