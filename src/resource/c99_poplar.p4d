@@ -23,16 +23,19 @@ export
 	/ CChar
 
 File
-	= _ { ( @TopLevel / _ )* #Source } EOT
+	= _ { ( @TopLevel / @{ '}' `} が余分に付いています` #Message } /_ )* #Source } EOT
 
 Chunk
 	= TopLevel
 	/ Statement
 	/ Expression
 	/ Type
+
 _
 	= (S / BLOCKCOMMENT / LINECOMMENT / ATTRIBUTE)*
 
+__
+	= (S / BLOCKCOMMENT / LINECOMMENT / ATTRIBUTE)+
 S
 	= [ \n\r\t\u000B\u000C]
 
@@ -195,7 +198,7 @@ Directive
 
 
 FunctionDeclaration
-	= { @AnnotationList @Type _ @Name _ "(" @FunctionParamList ")" (_ @Block /_ ";") #Function }
+	= { @AnnotationList @Type _ @Name _ @Lbr @FunctionParamList @Rbr (@Block / _ ";") #Function }
 
 AnnotationList
 	= { (@Annotation)*  #List } _
@@ -223,11 +226,11 @@ FunctionParam
 //==============
 
 TypeDef
-	= { "typedef" _ @Type (_ @VarName _/_ @Name _)? (',' _ @VarName _/_ @Name _)* ";" #TypeDeclaration }
+	= { "typedef" _ @Type (_ @VarName _/_ @Name _)? (',' _ @VarName _/_ @Name _)* @Scln #TypeDeclaration }
 
 VariableDeclaration
-	= { @AnnotationList @Type @InitDecl ("," @InitDecl)*  ATTRIBUTE? ";" #Declaration }
-	/ { @AnnotationList @Type ("=" @Initializer)? ("," @InitDecl)* ATTRIBUTE? ";" #Declaration }
+	= { @AnnotationList @Type @InitDecl ("," @InitDecl)*  ATTRIBUTE? @Scln #Declaration }
+	/ { @AnnotationList @Type ("=" @Initializer)? ("," @InitDecl)* ATTRIBUTE? @Scln #Declaration }
 
 InitDecl
 	= { @VarName ("=" @Initializer)? #VarDecl } _
@@ -324,25 +327,37 @@ Enumerator
 // Block, Statement
 //===================
 
+Br
+	= { '}' #Rbr / `} が必要です` #Message } _
+
 Block
-	= { "{" (@Directive /  @Statement / @Declaration / _ )* "}" #Block }
+	= { (_ @{ '{' #Lbr } /  __ @{ `{ が必要です` #Message} ) _ (@Directive /  @Statement / @Declaration / _ )* @Br #Block }
+
+Lbr
+	= { '(' #Lbr / `( が必要です` #Message } _
+
+Rbr
+	= { ')' #Rbr / `) が必要です` #Message }
+
+Scln
+	= { ';' #Rbr / `; が必要です` #Message } _
 
 Statement
 	= Block
-	/ { "if" _  "(" @Expression ")" @Statement ("else" _ @Statement)? #If }
-	/ { "switch" _ "(" @Expression ")" @Statement #Switch }
-	/ { "while" _ "(" @Expression ")" @Statement #While }
-	/ { "do" _ @Statement "while" _ "(" @Expression ")" ";" #DoWhile }
-	/ { "for" _ "(" (@Expression)? ";" (@Expression)? ";" (@Expression)? ")" @Statement #For }
-	/ { "for" _ "(" @Declaration (@Expression)? ";" (@Expression)? ";" @Statement #For }
-	/ { "goto" _ @Name ";" #Goto }
-	/ { "continue" _ ";" #Continue }
-	/ { "break" _ ";" #Break }
-	/ { "return" _ (@Expression)?  ";" #Return }
+	/ { "if" _     @Lbr @Expression @Rbr @Statement ("else" _ @Statement)? #If }
+	/ { "switch" _ @Lbr @Expression @Rbr @Statement #Switch }
+	/ { "while" _  @Lbr @Expression @Rbr @Statement #While }
+	/ { "do" _ @Statement "while" _ @Lbr @Expression @Rbr @Scln #DoWhile }
+	/ { "for" _ @Lbr (@Expression)? @Scln (@Expression)? @Scln (@Expression)? @Rbr @Statement #For }
+	/ { "for" _ @Lbr @Declaration (@Expression)? @Scln (@Expression)? @Scln @Statement #For }
+	/ { "goto" _ @Name @Scln #Goto }
+	/ { "continue" _ @Scln #Continue }
+	/ { "break" _ @Scln #Break }
+	/ { "return" _ (@Expression)?  @Scln #Return }
 	/ { "case" _ @ConstantExpression ":" (!"case" !"default" @Statement)* #SwitchCase }
 	/ { "default" _ ":" (!"case" @Statement)* #SwitchDefault }
 	/ { @Name ":" #Label }
-	/ { @Expression ";" #ExpressionStatement }
+	/ { @Expression @Scln #ExpressionStatement }
 	/ { #Empty } ";"
 
 //Expression
@@ -422,10 +437,10 @@ CastExpression
 
 PostfixExpression
 	= ( PrimaryExpression / { "(" @Type ")" "{" @{ (addInitializerList)* ","? #Initializer } "}" } ) 
-	{@ (addFunctionCall / addPointerField / addIndex / addField / addInc / addDec) }*
+	{@ (addFunctionCall @Rbr / addPointerField / addIndex / addField / addInc / addDec) }*
 
 addFunctionCall
-	= @{ "(" addArgumentExpressionList? ")" #List} #Apply
+	= @{ "(" addArgumentExpressionList? #List} #Apply
 
 addArgumentExpressionList
 	= (@AssignmentExpression ("," @AssignmentExpression)*)

@@ -51,18 +51,30 @@ public class PoplarMain {
 			System.exit(0);
 		}
 
-		CSourceGenerator generator = new CSourceGenerator(outputFileName);
 		Grammar peg = new GrammarFactory().newGrammar("main", "c99.p4d");
 		ParsingSource ps = ParsingSource.loadSource(inputFileName);
 		ParsingContext p = new ParsingContext(ps);
 		ParsingObject o = p.parse(peg, "File");
+
 		if(o != null) {
+			CSourceGenerator generator = new CSourceGenerator(outputFileName);
 			generator.writeC(o, verbose);
 		} else {
 			if(p.isFailure()) {
-				System.out.println(p.source.formatPositionLine("error", p.fpos, p.getErrorMessage()));
-				System.out.println(p.source.formatPositionLine("maximum matched", p.head_pos, ""));
-				return;
+				Grammar fixer = new GrammarFactory().newGrammar("main", "c99_poplar.p4d");
+				ParsingSource inputs = ParsingSource.loadSource(inputFileName);
+				ParsingContext pc = new ParsingContext(inputs);
+				ParsingObject po = pc.parse(fixer, "File");
+				if(po != null) {
+					PoplarCSourceGenerator generator = new PoplarCSourceGenerator(outputFileName);
+					generator.writeC(po, verbose);
+				} else {
+					if(pc.isFailure()) {
+						System.out.println(pc.source.formatPositionLine("error", pc.fpos, pc.getErrorMessage()));
+						System.out.println(pc.source.formatPositionLine("maximum matched", pc.head_pos, ""));
+						return;
+					}
+				}
 			}
 		}
 	}

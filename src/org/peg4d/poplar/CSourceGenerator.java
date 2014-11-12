@@ -56,7 +56,7 @@ public class CSourceGenerator extends Generator implements CTags {
 		}
 	}
 
-	private void createAnnotation(ParsingObject annotations) {
+	protected void createAnnotation(ParsingObject annotations) {
 		if(annotations.size() == 0) {
 		} else {
 			for(int i = 0; i < annotations.size(); i++) {
@@ -67,7 +67,7 @@ public class CSourceGenerator extends Generator implements CTags {
 		}
 	}
 
-	private void createParameters(ParsingObject params) {
+	protected void createParameters(ParsingObject params) {
 		this.write("(");
 		int size = params.size() - 1;
 		for(int i = 0; i < size; i++) {
@@ -88,23 +88,15 @@ public class CSourceGenerator extends Generator implements CTags {
 		this.write(" ");
 		this.dispatch(pego.get(2)); //Name
 
-		//FIXME For variable declaration?
-		if(isMessage(pego.get(3)) && isMessage(pego.get(5)) && pego.get(4).size() == 0) {
+		this.createParameters(pego.get(3)); //Params
+		if(pego.size() == 4) {
 			this.write(";\n");
 			return;
 		}
 
-		this.dispatchWithoutEmpty(pego.get(3)); //(
-		this.createParameters(pego.get(4)); //Params
-		if(pego.size() == 5) {
-			this.write(";\n");
-			return;
-		}
-		this.dispatchWithoutEmpty(pego.get(5)); //)
-
-		if(pego.size() > 6) {
-			this.dispatchWithoutEmpty(pego.get(6)); //Block or ; or Empty
-			if(!Is(pego.get(6), "Block")) {
+		if(pego.size() > 4) {
+			this.dispatchWithoutEmpty(pego.get(4)); //Block or ; or Empty
+			if(!Is(pego.get(4), "Block")) {
 				this.write(";");
 			}
 			this.write("\n");
@@ -262,7 +254,7 @@ public class CSourceGenerator extends Generator implements CTags {
 		return p.getTag().toString().equals("ExpressionStatement");
 	}
 
-	private boolean isMessage(ParsingObject pego) {
+	protected boolean isMessage(ParsingObject pego) {
 		return pego.getTag().toString().equals("Message");
 	}
 
@@ -305,7 +297,7 @@ public class CSourceGenerator extends Generator implements CTags {
 		}
 	}
 
-	private boolean Is(ParsingObject parsingObject, String string) {
+	protected boolean Is(ParsingObject parsingObject, String string) {
 		return parsingObject.getTag().toString().equals(string);
 	}
 
@@ -360,7 +352,7 @@ public class CSourceGenerator extends Generator implements CTags {
 		}
 	}
 
-	private void dispatchWithoutEmpty(ParsingObject pego) {
+	protected void dispatchWithoutEmpty(ParsingObject pego) {
 		if(!isEmpty(pego)) {
 			this.dispatch(pego);
 		}
