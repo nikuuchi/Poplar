@@ -143,9 +143,7 @@ public class CSourceGenerator extends Generator implements CTags {
 		this.write(pego.getText());
 	}
 
-	@Override
-	public void genTStruct(ParsingObject pego) {
-		this.write("struct ");
+	private void genTStructOrUnion(ParsingObject pego) {
 		this.dispatch(pego.get(0));
 		if(pego.size() == 1) {
 			return;
@@ -162,9 +160,15 @@ public class CSourceGenerator extends Generator implements CTags {
 	}
 
 	@Override
+	public void genTStruct(ParsingObject pego) {
+		this.write("struct ");
+		this.genTStructOrUnion(pego);
+	}
+
+	@Override
 	public void genTUnion(ParsingObject pego) {
-		System.err.println("union");
-		this.write("union");
+		this.write("union ");
+		this.genTStructOrUnion(pego);
 	}
 
 	@Override
