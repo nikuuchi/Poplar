@@ -182,8 +182,6 @@ public class CSourceGenerator extends Generator implements CTags {
 
 	@Override
 	public void genTFunc(ParsingObject pego) {
-		//System.err.println("TFunc");
-		//this.write("/*function*/");
 		this.dispatch(pego.get(0)); //return Type
 		this.write(" (* ");
 		this.dispatch(pego.get(1)); //Name
