@@ -39,4 +39,21 @@ public class PoplarCSourceGenerator extends CSourceGenerator {
 			this.write(";\n");
 		}
 	}
+
+	@Override
+	public void genTypeDeclaration(ParsingObject pego) {
+		this.write("typedef ");
+		this.dispatch(pego.get(0));
+		if(Is(pego.get(0), "TFunc")) {
+			this.write(";");
+			if(isMessage(pego.get(1))) {
+				this.dispatch(pego.get(1));
+			}
+			this.write("\n");
+		} else {
+			this.write(" ");
+			this.dispatch(pego.get(1));
+			this.write(";\n");
+		}
+	}
 }

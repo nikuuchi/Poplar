@@ -29,7 +29,13 @@ public class CSourceGenerator extends Generator implements CTags {
 		try {
 			m = this.getClass().getDeclaredMethod(name, ParsingObject.class);
 		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
+			try {
+				m = this.getClass().getSuperclass().getDeclaredMethod(name, ParsingObject.class);
+			} catch (NoSuchMethodException e1) {
+				e1.printStackTrace();
+			} catch (SecurityException e1) {
+				e1.printStackTrace();
+			}
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		}
