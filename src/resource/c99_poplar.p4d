@@ -331,7 +331,7 @@ Br
 	= { '}' #Rbr / `} が必要です` #Message } _
 
 Block
-	= { (_ @{ '{' #Lbr } /  __ @{ `{ が必要です` #Message} ) _ (@Directive /  @Statement / @Declaration / _ )* @Br #Block }
+	= { (_ @{ '{' #Lbr } /  __ @{ `{ が必要です` #Message} ) _ (!FunctionDeclaration (@Directive /  @Statement / @StructDeclaration _ ";" / @VariableDeclaration / _))* @Br #Block }
 
 Lbr
 	= { '(' #Lbr / `( が必要です` #Message } _
